@@ -1,0 +1,273 @@
+# Schema Overview
+
+A schema defines the structure and behavior of a form.
+
+Every form in AutoForma React is built from a collection of field schemas.
+
+```tsx
+<FormGenerator
+  schema={[
+    {
+      type: "text",
+      name: "firstName",
+      label: "First Name",
+    },
+  ]}
+  onSubmit={console.log}
+/>
+```
+
+---
+
+## What Is a Field Schema?
+
+A field schema describes a single field inside the form.
+
+Example:
+
+```ts
+{
+  type: "text",
+  name: "firstName",
+  label: "First Name",
+}
+```
+
+---
+
+## Common Properties
+
+All field types share a common set of properties.
+
+### type
+
+Defines the field type.
+
+```ts
+type: "text"
+```
+
+### name
+
+Unique identifier used to store and retrieve values.
+
+```ts
+name: "firstName"
+```
+
+### label
+
+Text displayed to the user.
+
+```ts
+label: "First Name"
+```
+
+### initialValue
+
+Provides the initial value of the field.
+
+```ts
+initialValue: "John"
+```
+
+### visible
+
+Controls whether the field is displayed.
+
+```ts
+visible: true
+```
+
+### dependsOn
+
+Defines field dependencies.
+
+```ts
+dependsOn: ["country"]
+```
+
+### meta
+
+Stores custom field metadata.
+
+```ts
+meta: {
+  placeholder: "Enter your first name"
+}
+```
+
+---
+
+## BaseFieldSchema
+
+All field types inherit from `BaseFieldSchema`.
+
+```ts
+interface BaseFieldSchema {
+  type: BuiltInFieldType;
+  name: string;
+  label: string;
+  initialValue?: any;
+  visible?: boolean;
+  dependsOn?: string[];
+  meta?: Record<string, any>;
+}
+```
+
+---
+
+## SelectFieldSchema
+
+Used to display a dropdown list.
+
+```ts
+{
+  type: "select",
+  name: "status",
+  label: "Status",
+  options: [
+    {
+      label: "Active",
+      value: "ACTIVE",
+    },
+    {
+      label: "Inactive",
+      value: "INACTIVE",
+    },
+  ],
+}
+```
+
+### Additional Properties
+
+| Property | Description              |
+| -------- | ------------------------ |
+| options  | Available select options |
+
+---
+
+## ObjectFieldSchema
+
+Used to group related fields together.
+
+```ts
+{
+  type: "object",
+  name: "address",
+  label: "Address",
+  fields: [
+    {
+      type: "text",
+      name: "city",
+      label: "City",
+    },
+    {
+      type: "text",
+      name: "country",
+      label: "Country",
+    },
+  ],
+}
+```
+
+### Additional Properties
+
+| Property | Description             |
+| -------- | ----------------------- |
+| fields   | Child field definitions |
+
+---
+
+## ArrayFieldSchema
+
+Used for repeatable groups of fields.
+
+```ts
+{
+  type: "array",
+  name: "contacts",
+  label: "Contacts",
+  fields: [
+    {
+      type: "text",
+      name: "name",
+      label: "Name",
+    },
+    {
+      type: "text",
+      name: "phone",
+      label: "Phone",
+    },
+  ],
+}
+```
+
+### Additional Properties
+
+| Property | Description                       |
+| -------- | --------------------------------- |
+| fields   | Template used for each array item |
+
+---
+
+## Schema Types
+
+AutoForma React currently supports four schema types:
+
+| Type              | Description            |
+| ----------------- | ---------------------- |
+| BaseFieldSchema   | Standard fields        |
+| SelectFieldSchema | Dropdown fields        |
+| ObjectFieldSchema | Nested objects         |
+| ArrayFieldSchema  | Repeatable collections |
+
+---
+
+## TypeScript Types
+
+The main schema type used by AutoForma React is:
+
+```ts
+type FormFieldSchema =
+  | BaseFieldSchema
+  | SelectFieldSchema
+  | ObjectFieldSchema
+  | ArrayFieldSchema;
+```
+
+This allows a single schema array to contain different field types.
+
+---
+
+## Example Form
+
+```tsx
+<FormGenerator
+  schema={[
+    {
+      type: "text",
+      name: "firstName",
+      label: "First Name",
+    },
+    {
+      type: "select",
+      name: "status",
+      label: "Status",
+      options: [
+        {
+          label: "Active",
+          value: "ACTIVE",
+        },
+      ],
+    },
+  ]}
+  onSubmit={console.log}
+/>
+```
+
+---
+
+## What's Next?
+
+Continue to the **Field Types** section to learn about each field type in detail and see live examples.

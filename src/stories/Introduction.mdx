@@ -1,0 +1,145 @@
+# AutoForma React
+
+AutoForma React is a schema-driven form generator built on top of React Hook Form.
+
+It helps developers build dynamic, maintainable, and reusable forms using TypeScript schemas instead of manually creating every field, validation rule, and UI interaction.
+
+---
+
+## Overview
+
+Modern applications often contain dozens of forms with similar patterns and behaviors. Writing and maintaining those forms manually can quickly become repetitive and difficult to scale.
+
+AutoForma React solves this problem by allowing forms to be defined declaratively through schemas.
+
+Instead of building forms field-by-field, you describe the structure of the form and let AutoForma handle rendering, state management, validation, nested objects, arrays, and dynamic behaviors.
+
+---
+
+## Key Features
+
+### Schema-Based Forms
+
+Build forms using TypeScript objects.
+
+### Built-in Field Types
+
+Supported field types:
+
+* text
+* number
+* checkbox
+* date
+* datetime
+* time
+* select
+
+### Nested Objects
+
+Create complex hierarchical forms using object fields.
+
+### Array Fields
+
+Support repeatable form sections and collections of data.
+
+### Custom Field Renderers
+
+Replace default components with your own React components.
+
+### Validation
+
+Attach custom validation rules to individual fields.
+
+### Field Change Events
+
+Respond to user input and update other fields dynamically.
+
+### Dynamic Schema Updates
+
+Modify field behavior, visibility, labels, and metadata at runtime.
+
+### React Hook Form Integration
+
+Built on top of React Hook Form for excellent performance and developer experience.
+
+---
+
+## Basic Example
+
+```tsx
+import { FormGenerator } from "autoforma-react";
+
+export default function Example() {
+  return (
+    <FormGenerator
+      schema={[
+        {
+          type: "text",
+          name: "firstName",
+          label: "First Name",
+        },
+        {
+          type: "text",
+          name: "lastName",
+          label: "Last Name",
+        },
+        {
+          type: "select",
+          name: "status",
+          label: "Status",
+          options: [
+            { label: "Active", value: "ACTIVE" },
+            { label: "Inactive", value: "INACTIVE" },
+          ],
+        },
+      ]}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+    />
+  );
+}
+```
+
+---
+
+## Typical Use Cases
+
+AutoForma React is ideal for:
+
+* ERP Systems
+* CRM Platforms
+* Internal Business Applications
+* Admin Panels
+* Back Office Systems
+* Dynamic Form Builders
+* Enterprise Applications
+
+---
+
+## Philosophy
+
+AutoForma React is built around four principles:
+
+1. Reduce boilerplate code.
+2. Keep forms declarative.
+3. Support complex data structures.
+4. Remain fully customizable.
+
+You should never be forced to choose between productivity and flexibility. AutoForma aims to provide both.
+
+---
+
+## What's Next?
+
+Continue through the documentation to learn more about:
+
+* Getting Started
+* Field Types
+* Object Fields
+* Array Fields
+* Validation
+* Custom Renderers
+* Field Change Events
+* Dynamic Schema Updates
+* API Reference

@@ -1,0 +1,140 @@
+# Getting Started
+
+This guide will help you install AutoForma React and create your first form in just a few minutes.
+
+---
+
+## Installation
+
+Install AutoForma React together with its required dependencies.
+
+```bash
+npm install autoforma-react react-hook-form
+```
+
+### Peer Dependencies
+
+AutoForma React requires:
+
+```txt
+react >= 18
+react-dom >= 18
+react-hook-form >= 7
+```
+
+---
+
+## Your First Form
+
+Create a simple form using a schema definition.
+
+```tsx
+import { FormGenerator } from "autoforma-react";
+
+export default function App() {
+  return (
+    <FormGenerator
+      schema={[
+        {
+          type: "text",
+          name: "firstName",
+          label: "First Name",
+        },
+        {
+          type: "text",
+          name: "lastName",
+          label: "Last Name",
+        },
+      ]}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+    />
+  );
+}
+```
+
+---
+
+## Understanding the Basics
+
+Every form in AutoForma React is built using a schema.
+
+Each field is represented by a JavaScript object.
+
+```tsx
+{
+  type: "text",
+  name: "firstName",
+  label: "First Name",
+}
+```
+
+### Required Properties
+
+| Property | Description                       |
+| -------- | --------------------------------- |
+| `type`   | The field type                    |
+| `name`   | Unique field identifier           |
+| `label`  | Field label displayed to the user |
+
+---
+
+## Handling Form Submission
+
+When the form is submitted successfully, AutoForma React passes all form values to the `onSubmit` callback.
+
+```tsx
+<FormGenerator
+  schema={schema}
+  onSubmit={(values) => {
+    console.log(values);
+  }}
+/>
+```
+
+Example result:
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe"
+}
+```
+
+---
+
+## Setting Initial Values
+
+You can provide initial values directly in your schema.
+
+```tsx
+{
+  type: "text",
+  name: "firstName",
+  label: "First Name",
+  initialValue: "John",
+}
+```
+
+---
+
+## Built-in Field Types
+
+AutoForma React currently supports the following field types:
+
+* text
+* number
+* checkbox
+* date
+* datetime
+* time
+* select
+* object
+* array
+
+---
+
+## What's Next?
+
+Now that you've created your first form, continue to **Schema Overview** to learn how schemas are structured and how AutoForma React handles complex form scenarios.

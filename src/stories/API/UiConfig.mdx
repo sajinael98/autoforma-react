@@ -1,0 +1,195 @@
+# UiConfig
+
+`UiConfig` allows you to customize how fields are rendered.
+
+It provides hooks for replacing the built-in field components with your own React components.
+
+---
+
+## Type Definition
+
+```ts
+type UiConfig = {
+  renderersByName?: CustomRender;
+  renderersByType?: CustomRender;
+};
+```
+
+---
+
+# renderersByName
+
+Registers custom renderers for specific field names.
+
+### Type
+
+```ts
+Record<string, React.ComponentType<CustomFieldRendererProps>>;
+```
+
+### Example
+
+```tsx
+uiConfig={{
+  renderersByName: {
+    description: DescriptionRenderer,
+  },
+}}
+```
+
+Only the field named `description` will use the custom renderer.
+
+---
+
+## Example
+
+```tsx
+function DescriptionRenderer({ fieldSchema }: CustomFieldRendererProps) {
+  return <textarea placeholder={fieldSchema.label} />;
+}
+```
+
+```tsx
+<FormGenerator
+  schema={[
+    {
+      type: "text",
+      name: "description",
+      label: "Description",
+    },
+  ]}
+  uiConfig={{
+    renderersByName: {
+      description: DescriptionRenderer,
+    },
+  }}
+/>
+```
+
+---
+
+# renderersByType
+
+Registers custom renderers for an entire field type.
+
+### Type
+
+```ts
+Record<string, React.ComponentType<CustomFieldRendererProps>>;
+```
+
+### Example
+
+```tsx
+uiConfig={{
+  renderersByType: {
+    text: TextRenderer,
+  },
+}}
+```
+
+All text fields will use the custom renderer.
+
+---
+
+## Example
+
+```tsx
+function TextRenderer({ fieldSchema }: CustomFieldRendererProps) {
+  return <input placeholder={fieldSchema.label} />;
+}
+```
+
+```tsx
+<FormGenerator
+  schema={[
+    {
+      type: "text",
+      name: "firstName",
+      label: "First Name",
+    },
+    {
+      type: "text",
+      name: "lastName",
+      label: "Last Name",
+    },
+  ]}
+  uiConfig={{
+    renderersByType: {
+      text: TextRenderer,
+    },
+  }}
+/>
+```
+
+---
+
+# CustomFieldRendererProps
+
+Custom renderers receive the following props.
+
+```ts
+type CustomFieldRendererProps = {
+  fieldSchema: FormFieldSchema;
+  control: Control<FormValues>;
+};
+```
+
+---
+
+## fieldSchema
+
+Provides access to the current field configuration.
+
+### Example
+
+```tsx
+fieldSchema.name;
+fieldSchema.label;
+fieldSchema.meta;
+```
+
+---
+
+## control
+
+Provides access to React Hook Form's control object.
+
+### Example
+
+```tsx
+<Controller
+  control={control}
+  name={fieldSchema.name}
+  render={({ field }) => <input {...field} />}
+/>
+```
+
+---
+
+# Renderer Resolution Order
+
+When rendering a field, AutoForma React resolves renderers in the following order:
+
+1. renderersByName
+2. renderersByType
+3. Built-in renderer
+
+This means field-specific renderers always take precedence over type renderers.
+
+---
+
+# Best Practices
+
+- Use `renderersByName` for individual field customization.
+- Use `renderersByType` for application-wide UI consistency.
+- Always connect custom inputs to React Hook Form using `control`.
+- Prefer reusable renderer components when possible.
+
+---
+
+# Related Documentation
+
+- FormGeneratorProps
+- FormFieldSchema
+- Custom Renderers

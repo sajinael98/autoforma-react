@@ -1,0 +1,372 @@
+# FormGeneratorProps
+
+`FormGenerator` is the main component of AutoForma React.
+
+It renders a form from a schema definition and provides hooks for validation, field changes, dynamic field updates, and UI customization.
+
+```tsx
+<FormGenerator {...props} />
+```
+
+---
+
+## Type Definition
+
+```ts
+interface FormGeneratorProps {
+  schema: FormFieldSchema[];
+  onSubmit: SubmitHandler<FormValues>;
+  values?: FormValues;
+  submitButton?: boolean | React.ReactNode;
+  uiConfig?: UiConfig;
+
+  validate?: Record<
+    string,
+    (args: { value: any; values: FormValues }) => string | undefined
+  >;
+
+  onError?: (errors: Record<string, string>) => void;
+
+  onDirty?: (isDirty: boolean) => void;
+
+  onFieldChange?: Record<
+    string,
+    (helpers: {
+      path: string;
+      value: any;
+      setValue: UseFormSetValue<FormValues>;
+      setValues: UseFormSetValues<FormValues>;
+      setError: UseFormSetError<FormValues>;
+      getValues: UseFormGetValues<FormValues>;
+    }) => void
+  >;
+
+  updateFieldSchema?: {
+    [key: string]: (args: {
+      path: string;
+      fieldSchema: Readonly<FormFieldSchema>;
+      values: FormValues;
+    }) =>
+      | (Partial<Omit<FormFieldSchema, "type" | "name" | "fields">> &
+          Record<string, any>)
+      | Promise<
+          Partial<Omit<FormFieldSchema, "type" | "name" | "fields">> &
+            Record<string, any>
+        >;
+  };
+}
+```
+
+---
+
+# schema
+
+Defines the structure of the form.
+
+### Type
+
+```ts
+FormFieldSchema[]
+```
+
+### Required
+
+Yes
+
+### Example
+
+```tsx
+schema={[
+  {
+    type: "text",
+    name: "firstName",
+    label: "First Name",
+  },
+]}
+```
+
+---
+
+# onSubmit
+
+Called when the form is submitted successfully.
+
+### Type
+
+```ts
+SubmitHandler<FormValues>;
+```
+
+### Required
+
+Yes
+
+### Example
+
+```tsx
+onSubmit={(values) => {
+  console.log(values);
+}}
+```
+
+---
+
+# values
+
+Provides external values to the form.
+
+### Type
+
+```ts
+FormValues;
+```
+
+### Required
+
+No
+
+### Example
+
+```tsx
+values={{
+  firstName: "John",
+  lastName: "Doe",
+}}
+```
+
+### Common Use Cases
+
+- Loading data from an API
+- Editing existing records
+- Synchronizing form state with external state
+
+---
+
+# submitButton
+
+Controls submit button rendering.
+
+### Type
+
+```ts
+boolean | React.ReactNode;
+```
+
+### Default
+
+```ts
+true;
+```
+
+### Disable Built-in Submit Button
+
+```tsx
+submitButton={false}
+```
+
+### Custom Submit Button
+
+```tsx
+submitButton={<button type="submit">Save</button>}
+```
+
+---
+
+# uiConfig
+
+Provides custom UI renderers.
+
+### Type
+
+```ts
+UiConfig;
+```
+
+### Example
+
+```tsx
+uiConfig={{
+  renderersByType: {},
+  renderersByName: {},
+}}
+```
+
+See the **Custom Renderers** section for detailed examples.
+
+---
+
+# validate
+
+Registers field-level validation rules.
+
+### Type
+
+```ts
+Record<
+  string,
+  (args: { value: any; values: FormValues }) => string | undefined
+>;
+```
+
+### Example
+
+```tsx
+validate={{
+  email: ({ value }) => {
+    if (!value) {
+      return "Email is required";
+    }
+
+    if (!value.includes("@")) {
+      return "Invalid email address";
+    }
+
+    return undefined;
+  },
+}}
+```
+
+### Return Values
+
+| Return Value | Meaning           |
+| ------------ | ----------------- |
+| undefined    | Validation passed |
+| string       | Validation failed |
+
+---
+
+# onError
+
+Called when one or more validation rules fail.
+
+### Type
+
+```ts
+(errors: Record<string, string>) => void
+```
+
+### Example
+
+```tsx
+onError={(errors) => {
+  console.log(errors);
+}}
+```
+
+Example output:
+
+```json
+{
+  "email": "Invalid email address"
+}
+```
+
+---
+
+# onDirty
+
+Called whenever the form dirty state changes.
+
+### Type
+
+```ts
+(isDirty: boolean) => void
+```
+
+### Example
+
+```tsx
+onDirty={(isDirty) => {
+  console.log(isDirty);
+}}
+```
+
+### Common Use Cases
+
+- Unsaved changes warnings
+- Enable/disable save buttons
+- Navigation guards
+
+---
+
+# onFieldChange
+
+Registers handlers that execute when specific field values change.
+
+### Type
+
+```ts
+Record<string, FieldChangeHandler>;
+```
+
+### Example
+
+```tsx
+onFieldChange={{
+  firstName: ({ value, setValue }) => {
+    setValue("displayName", value);
+  },
+}}
+```
+
+### Available Helpers
+
+| Helper    | Description                |
+| --------- | -------------------------- |
+| path      | Current field path         |
+| value     | Current field value        |
+| setValue  | Update a single field      |
+| setValues | Update multiple fields     |
+| setError  | Set a field error          |
+| getValues | Access current form values |
+
+---
+
+# updateFieldSchema
+
+Allows field configuration to be updated dynamically at runtime.
+
+### Type
+
+```ts
+Record<string, UpdateFieldSchemaHandler>;
+```
+
+### Example
+
+```tsx
+updateFieldSchema={{
+  customerName: ({ values }) => {
+    return {
+      label:
+        values.customerType === "COMPANY"
+          ? "Company Name"
+          : "Full Name",
+    };
+  },
+}}
+```
+
+### Common Use Cases
+
+- Dynamic labels
+- Dynamic visibility
+- Dynamic placeholders
+- Runtime field configuration
+- Conditional form behavior
+
+### Async Support
+
+Field schema updates may be asynchronous.
+
+```tsx
+updateFieldSchema={{
+  customerName: async ({ values }) => {
+    const metadata = await fetchMetadata(values.customerType);
+
+    return {
+      label: metadata.label,
+    };
+  },
+}}
+```

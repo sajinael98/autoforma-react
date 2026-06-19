@@ -1,0 +1,322 @@
+# FormFieldSchema
+
+`FormFieldSchema` defines a single field within a form.
+
+Every field rendered by AutoForma React is represented by a schema object.
+
+---
+
+## Type Definition
+
+```ts
+type FormFieldSchema =
+  | BaseFieldSchema
+  | SelectFieldSchema
+  | ObjectFieldSchema
+  | ArrayFieldSchema;
+```
+
+---
+
+# BaseFieldSchema
+
+The foundation for all field types.
+
+```ts
+interface BaseFieldSchema {
+  type: BuiltInFieldType;
+  name: string;
+  label: string;
+  initialValue?: any;
+  visible?: boolean;
+  dependsOn?: string[];
+  meta?: Record<string, any>;
+}
+```
+
+---
+
+## type
+
+Specifies the field type.
+
+### Supported Values
+
+```ts
+"text"
+"number"
+"checkbox"
+"date"
+"datetime"
+"time"
+```
+
+### Example
+
+```ts
+{
+  type: "text",
+  name: "firstName",
+  label: "First Name",
+}
+```
+
+---
+
+## name
+
+Unique field identifier.
+
+### Example
+
+```ts
+name: "email"
+```
+
+Nested fields:
+
+```ts
+name: "address.city"
+```
+
+---
+
+## label
+
+Text displayed to users.
+
+### Example
+
+```ts
+label: "Email Address"
+```
+
+---
+
+## initialValue
+
+Sets the initial field value.
+
+### Example
+
+```ts
+initialValue: "John"
+```
+
+---
+
+## visible
+
+Controls field visibility.
+
+### Example
+
+```ts
+visible: false
+```
+
+---
+
+## dependsOn
+
+Declares field dependencies.
+
+Used together with dynamic field updates.
+
+### Example
+
+```ts
+dependsOn: ["customerType"]
+```
+
+Multiple dependencies:
+
+```ts
+dependsOn: [
+  "customerType",
+  "country",
+]
+```
+
+---
+
+## meta
+
+Stores custom field metadata.
+
+### Example
+
+```ts
+meta: {
+  placeholder: "Enter your email",
+  maxLength: 100,
+}
+```
+
+---
+
+# SelectFieldSchema
+
+Represents a dropdown field.
+
+```ts
+interface SelectFieldSchema
+  extends Omit<BaseFieldSchema, "type"> {
+  type: "select";
+
+  options: {
+    label: string;
+    value: string;
+  }[];
+}
+```
+
+---
+
+## options
+
+Available dropdown choices.
+
+### Example
+
+```ts
+options: [
+  {
+    label: "Active",
+    value: "ACTIVE",
+  },
+  {
+    label: "Inactive",
+    value: "INACTIVE",
+  },
+]
+```
+
+---
+
+# ObjectFieldSchema
+
+Represents a nested object.
+
+```ts
+interface ObjectFieldSchema
+  extends Omit<BaseFieldSchema, "type"> {
+  type: "object";
+
+  fields: FormFieldSchema[];
+}
+```
+
+---
+
+## Example
+
+```ts
+{
+  type: "object",
+  name: "address",
+  label: "Address",
+
+  fields: [
+    {
+      type: "text",
+      name: "city",
+      label: "City",
+    },
+    {
+      type: "text",
+      name: "country",
+      label: "Country",
+    },
+  ],
+}
+```
+
+Result:
+
+```json
+{
+  "address": {
+    "city": "Chicago",
+    "country": "USA"
+  }
+}
+```
+
+---
+
+# ArrayFieldSchema
+
+Represents a repeatable collection of items.
+
+```ts
+interface ArrayFieldSchema
+  extends Omit<BaseFieldSchema, "type"> {
+  type: "array";
+
+  fields: FormFieldSchema[];
+}
+```
+
+---
+
+## Example
+
+```ts
+{
+  type: "array",
+  name: "contacts",
+  label: "Contacts",
+
+  fields: [
+    {
+      type: "text",
+      name: "name",
+      label: "Name",
+    },
+    {
+      type: "text",
+      name: "phone",
+      label: "Phone",
+    },
+  ],
+}
+```
+
+Result:
+
+```json
+{
+  "contacts": [
+    {
+      "name": "John",
+      "phone": "123456"
+    },
+    {
+      "name": "Jane",
+      "phone": "987654"
+    }
+  ]
+}
+```
+
+---
+
+# Choosing the Right Schema Type
+
+| Schema Type       | Purpose                |
+| ----------------- | ---------------------- |
+| BaseFieldSchema   | Standard fields        |
+| SelectFieldSchema | Dropdown selections    |
+| ObjectFieldSchema | Nested objects         |
+| ArrayFieldSchema  | Repeatable collections |
+
+---
+
+# Related Documentation
+
+* FormGeneratorProps
+* UiConfig
+* Validation
+* Dynamic Schema Updates
+* Custom Renderers
