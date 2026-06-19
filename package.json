@@ -1,23 +1,36 @@
 {
   "name": "autoforma-react",
   "version": "1.1.0",
-  "description": "Schema-driven form generator for React built on top of React Hook Form.",
+  "description": "Schema-driven React form generator built on React Hook Form with TypeScript, validation, dynamic schemas, custom renderers, custom field types, object fields, and array fields.",
   "author": "Saji Nael",
   "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://sajinael98.github.io/autoforma-react",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sajinael98/autoforma-react.git"
+    "url": "git+https://github.com/sajinael98/autoforma-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sajinael98/autoforma-react/issues"
   },
   "keywords": [
     "react",
+    "react-form",
+    "react-forms",
+    "form",
     "forms",
     "form-builder",
     "form-generator",
-    "react-hook-form",
-    "typescript",
-    "schema",
+    "schema-form",
+    "schema-driven",
     "dynamic-forms",
+    "json-form",
+    "typescript",
+    "react-hook-form",
+    "validation",
+    "custom-renderers",
+    "custom-fields",
+    "object-fields",
+    "array-fields",
     "autoforma"
   ],
   "type": "module",
@@ -42,6 +55,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "preview-storybook": "storybook preview",
+    "deploy-storybook": "npm run build-storybook && gh-pages -d storybook-static",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -66,6 +80,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-storybook": "^10.4.6",
+    "gh-pages": "^6.3.0",
     "globals": "^17.6.0",
     "playwright": "^1.61.0",
     "storybook": "^10.4.6",
