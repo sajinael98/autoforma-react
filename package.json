@@ -1,6 +1,6 @@
 {
   "name": "autoforma-react",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Schema-driven React form generator built on React Hook Form with TypeScript, validation, dynamic schemas, custom renderers, custom field types, object fields, and array fields.",
   "author": "Saji Nael",
   "license": "SEE LICENSE IN LICENSE",
@@ -56,7 +56,8 @@
     "build-storybook": "storybook build",
     "preview-storybook": "storybook preview",
     "deploy-storybook": "npm run build-storybook && gh-pages -d storybook-static",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "dev": "vite --config vite.demo.config.ts"
   },
   "peerDependencies": {
     "react": ">=18",

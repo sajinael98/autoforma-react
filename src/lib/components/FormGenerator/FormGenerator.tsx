@@ -153,13 +153,11 @@ const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
     return (
       <FormProvider {...form}>
         <FormConfigProvider value={{ uiConfig, updateFieldSchema }}>
-          <form onSubmit={handleOnSubmit}>
-            <SchemaRenderer schema={schema} />
+          <SchemaRenderer schema={schema} />
 
-            {typeof submitButton === "boolean" && submitButton && (
-              <button type="submit">Submit</button>
-            )}
-          </form>
+          {typeof submitButton === "boolean" && submitButton && (
+            <button onClick={handleOnSubmit}>Submit</button>
+          )}
         </FormConfigProvider>
       </FormProvider>
     );
