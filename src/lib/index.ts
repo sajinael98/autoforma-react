@@ -18,5 +18,6 @@ export type {
   BuiltInFieldType,
 } from "./types/form.types";
 
+export { default as SchemaRenderer } from "./components/SchemaRenderer";
 export { generateInitialValues, normalizeFieldPath } from "./utils/formHelpers";
 export { Controller, useFormContext } from "react-hook-form";

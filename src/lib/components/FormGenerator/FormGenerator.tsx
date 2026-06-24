@@ -1,6 +1,10 @@
 import { useEffect, forwardRef, useImperativeHandle } from "react";
 import { FormProvider, useForm, type UseFormReturn } from "react-hook-form";
-import type { FormGeneratorProps, FormValues } from "../../types/form.types";
+import type {
+  FormGeneratorProps,
+  FormGeneratorRef,
+  FormValues,
+} from "../../types/form.types";
 import {
   generateInitialValues,
   normalizeFieldPath,
@@ -69,7 +73,7 @@ export function runCustomValidation(
   return errors;
 }
 
-const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
+const FormGenerator = forwardRef<FormGeneratorRef, FormGeneratorProps>(
   (props, ref) => {
     const {
       schema,
@@ -88,9 +92,7 @@ const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
       defaultValues: generateInitialValues(schema, values),
     });
 
-    useImperativeHandle(ref, () => form, [form]);
-
-    const handleOnSubmit = form.handleSubmit(async (formValues: FormValues) => {
+    const submit = form.handleSubmit((formValues: FormValues) => {
       if (validate) {
         const validationErrors = runCustomValidation(
           formValues,
@@ -98,6 +100,7 @@ const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
           "",
           {},
         );
+
         const errorPaths = Object.keys(validationErrors);
 
         if (errorPaths.length > 0) {
@@ -108,15 +111,22 @@ const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
             });
           });
 
-          if (onError) {
-            onError(validationErrors);
-          }
+          onError?.(validationErrors);
           return;
         }
       }
 
       onSubmit(formValues);
     });
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        ...form,
+        submit,
+      }),
+      [form, submit],
+    );
 
     useEffect(() => {
       if (!onFieldChange) return;
@@ -156,7 +166,7 @@ const FormGenerator = forwardRef<UseFormReturn<FormValues>, FormGeneratorProps>(
           <SchemaRenderer schema={schema} />
 
           {typeof submitButton === "boolean" && submitButton && (
-            <button onClick={handleOnSubmit}>Submit</button>
+            <button onClick={submit}>Submit</button>
           )}
         </FormConfigProvider>
       </FormProvider>

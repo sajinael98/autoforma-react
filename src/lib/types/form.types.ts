@@ -19,7 +19,12 @@ export type BuiltInFieldType =
 
 export type FormValues = Record<string, any>;
 
-export type FormGeneratorRef = UseFormReturn<FormValues>;
+export type FormGeneratorRef = Omit<
+  UseFormReturn<FormValues>,
+  "handleSubmit"
+> & {
+  submit: (e?: React.BaseSyntheticEvent<object, any, any>) => Promise<void>;
+};
 
 export interface AnyFieldSchema {
   type: string;
