@@ -1,5 +1,5 @@
 import { useEffect, forwardRef, useImperativeHandle } from "react";
-import { FormProvider, useForm, type UseFormReturn } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import type {
   FormGeneratorProps,
   FormGeneratorRef,
@@ -144,8 +144,14 @@ const FormGenerator = forwardRef<FormGeneratorRef, FormGeneratorProps>(
         handler({
           path,
           value,
-          setValue: form.setValue,
-          setValues: form.setValues,
+          setValue: (key, value) => {
+            if (Object.is(form.getValues(key), value)) return;
+
+            form.setValue(key, value, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          },
           getValues: form.getValues,
           setError: form.setError,
         });

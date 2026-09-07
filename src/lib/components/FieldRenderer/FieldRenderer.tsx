@@ -143,7 +143,13 @@ const BaseInputRenderer = ({
 }) => {
   const inputType =
     fieldSchema.type === "datetime" ? "datetime-local" : fieldSchema.type;
-  return <input type={inputType} {...field} {...(inputType === 'checkbox' && {checked: field.value})} />;
+  return (
+    <input
+      type={inputType}
+      {...field}
+      {...(inputType === "checkbox" && { checked: field.value })}
+    />
+  );
 };
 
 interface FieldProps {
@@ -214,10 +220,17 @@ const FieldRenderer = (props: FieldRendererProps) => {
     normalizeDependsOn(depPath, currentFieldPath),
   );
 
-  const watchedValues = useWatch({
+  const watchedValuesArray = useWatch({
     name: realPathsToWatch,
     control,
   });
+
+  const watchedValues = Object.fromEntries(
+    dependsOn.map((dependency, index) => [
+      dependency,
+      watchedValuesArray?.[index],
+    ]),
+  );
 
   useEffect(() => {
     if (!updateFieldSchema) return;
@@ -235,7 +248,7 @@ const FieldRenderer = (props: FieldRendererProps) => {
       const schemaUpdates = await handler({
         fieldSchema,
         path: fieldSchema.name,
-        values: getValues(),
+        values: watchedValues,
       });
 
       if (!schemaUpdates) return;

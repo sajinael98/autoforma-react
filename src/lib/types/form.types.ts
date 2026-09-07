@@ -4,9 +4,7 @@ import type {
   SubmitHandler,
   UseFormGetValues,
   UseFormReturn,
-  UseFormSetError,
-  UseFormSetValue,
-  UseFormSetValues,
+  UseFormSetError
 } from "react-hook-form";
 
 export type BuiltInFieldType =
@@ -32,6 +30,7 @@ export interface AnyFieldSchema {
   label: string;
   initialValue?: any;
   visible?: boolean;
+  readonly?: boolean;
   dependsOn?: string[];
   meta?: Record<string, any>;
 }
@@ -98,8 +97,7 @@ export interface FormGeneratorProps<
     (helpers: {
       path: string;
       value: any;
-      setValue: UseFormSetValue<FormValues>;
-      setValues: UseFormSetValues<FormValues>;
+      setValue: (key: string, value: any) => void;
       setError: UseFormSetError<FormValues>;
       getValues: UseFormGetValues<FormValues>;
     }) => void
